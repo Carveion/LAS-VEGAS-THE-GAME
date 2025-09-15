@@ -1,50 +1,55 @@
 /* A CSS reset */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Style the whole page */
+/* General Body styles */
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; color: #f0f0f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
 
-/* Main game board container */
-#game-board { width: 90%; max-width: 1200px; }
+/* NEW: Lobby Styles */
+#lobby { text-align: center; background-color: #222; padding: 40px; border-radius: 10px; width: 100%; max-width: 500px; }
+#lobby h1 { margin-bottom: 20px; color: #3498db; }
+#lobby h2 { margin-bottom: 15px; }
+#player-name-input { width: 100%; padding: 10px; font-size: 1.1em; margin-bottom: 10px; border-radius: 5px; border: 1px solid #555; background-color: #333; color: #fff; }
+#join-game-button, #ready-button { width: 100%; padding: 12px; font-size: 1.2em; font-weight: bold; color: #fff; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
+#join-game-button { background-color: #27ae60; }
+#join-game-button:hover { background-color: #2ecc71; }
+#ready-button { background-color: #e67e22; margin-top: 15px; }
+#ready-button:hover { background-color: #f39c12; }
+#ready-button.ready { background-color: #2ecc71; border: 2px solid #fff; }
 
-/* Scoreboard styles */
+#lobby-players { list-style: none; padding: 0; margin-bottom: 20px; }
+.lobby-player-item { display: flex; justify-content: space-between; align-items: center; background-color: #333; padding: 10px; border-radius: 5px; margin-bottom: 5px; font-size: 1.2em; }
+.status-indicator { width: 20px; height: 20px; border-radius: 50%; background-color: #e74c3c; /* Red for not ready */ }
+.status-indicator.ready { background-color: #2ecc71; /* Green for ready */ }
+
+/* Game Container Styles */
+#game-container { width: 100%; }
+#game-board { width: 90%; max-width: 1200px; margin: 0 auto; }
 #scoreboard { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; padding: 10px; background-color: #222; border-radius: 8px; flex-wrap: wrap; min-height: 80px; align-items: center; }
 .player-score { text-align: center; padding: 5px 15px; border-radius: 5px; border: 3px solid transparent; transition: border-color 0.3s; color: #fff; }
 .player-score .name { font-weight: bold; font-size: 1.1em; }
 .player-score .score { font-size: 1.2em; color: #f0f0f0; }
-
-/* Casino layout */
 #casinos-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+/* ... (Rest of the game styles are identical to the previous version) ... */
 .casino { background-color: #2c3e50; border: 3px solid #3498db; border-radius: 10px; min-height: 220px;  padding: 10px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
 .casino-title { font-size: 1.5em; font-weight: bold; margin-bottom: 10px; color: #ecf0f1; display: flex; align-items: center; gap: 10px; }
 .money-cards { display: flex; justify-content: center; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
 .money-card { background-color: #f1c40f; color: #333; font-size: 1.2em; font-weight: bold; padding: 10px 15px; border-radius: 5px; border: 2px solid #f39c12; }
 .placed-dice { width: 100%; min-height: 60px; background-color: rgba(0, 0, 0, 0.2); border-radius: 5px; padding: 5px; display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; align-content: flex-start; }
-
-/* Player area styles */
 #player-area { background-color: #222; border: 2px solid #555; border-radius: 10px; padding: 20px; text-align: center; min-height: 150px; }
 #dice-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; min-height: 80px; }
 .dice-group { padding: 10px; border: 2px solid #555; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
 .dice-group:hover { transform: scale(1.05); box-shadow: 0 0 15px #3498db; border-color: #3498db; }
-
-/* Visual dice styles */
 .die-visual { width: 50px; height: 50px; background-color: #f0f0f0; border-radius: 8px; padding: 6px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); }
 .dot { background-color: #1a1a1a; border-radius: 50%; width: 10px; height: 10px; align-self: center; justify-self: center; }
 .casino-title .die-visual, .placed-dice .die-visual { width: 30px; height: 30px; padding: 4px; }
 .casino-title .dot, .placed-dice .dot { width: 6px; height: 6px; }
-
-/* Dots on colored dice are always white */
 .placed-dice .die-visual .dot { background-color: #fff; }
-
-/* Face layouts */
 .face-1 .dot:nth-of-type(1) { grid-area: 2 / 2; }
 .face-2 .dot:nth-of-type(1) { grid-area: 1 / 1; } .face-2 .dot:nth-of-type(2) { grid-area: 3 / 3; }
 .face-3 .dot:nth-of-type(1) { grid-area: 1 / 1; } .face-3 .dot:nth-of-type(2) { grid-area: 2 / 2; } .face-3 .dot:nth-of-type(3) { grid-area: 3 / 3; }
 .face-4 .dot:nth-of-type(1) { grid-area: 1 / 1; } .face-4 .dot:nth-of-type(2) { grid-area: 1 / 3; } .face-4 .dot:nth-of-type(3) { grid-area: 3 / 1; } .face-4 .dot:nth-of-type(4) { grid-area: 3 / 3; }
 .face-5 .dot:nth-of-type(1) { grid-area: 1 / 1; } .face-5 .dot:nth-of-type(2) { grid-area: 1 / 3; } .face-5 .dot:nth-of-type(3) { grid-area: 2 / 2; } .face-5 .dot:nth-of-type(4) { grid-area: 3 / 1; } .face-5 .dot:nth-of-type(5) { grid-area: 3 / 3; }
 .face-6 .dot:nth-of-type(1) { grid-area: 1 / 1; } .face-6 .dot:nth-of-type(2) { grid-area: 1 / 3; } .face-6 .dot:nth-of-type(3) { grid-area: 2 / 1; } .face-6 .dot:nth-of-type(4) { grid-area: 2 / 3; } .face-6 .dot:nth-of-type(5) { grid-area: 3 / 1; } .face-6 .dot:nth-of-type(6) { grid-area: 3 / 3; }
-
-/* Button styles */
 #roll-button { padding: 10px 20px; font-size: 1.2em; font-weight: bold; color: #fff; background-color: #27ae60; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; display: inline-flex; align-items: center; gap: 10px; }
 #roll-button:hover { background-color: #2ecc71; }
 #roll-button:disabled { background-color: #555; cursor: not-allowed; }
