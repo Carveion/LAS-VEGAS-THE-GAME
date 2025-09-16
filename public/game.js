@@ -67,12 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     rollButton.addEventListener('click', () => { socket.emit('rollDice'); });
+
     playerDiceContainer.addEventListener('click', (event) => {
         const group = event.target.closest('.dice-group');
         if (group && group.dataset.value) {
             socket.emit('placeDice', parseInt(group.dataset.value));
         }
     });
+
     playAgainButton.addEventListener('click', () => { socket.emit('playAgain'); });
     socket.on('roundOver', (roundNumber) => { alert(`Round ${roundNumber} is over!`); });
     socket.on('gameOver', (winner) => { alert(`GAME OVER!\nWinner: ${winner.name} with $${winner.score.toLocaleString()}!`); });
