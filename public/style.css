@@ -21,7 +21,8 @@ body::before {
     position: absolute;
     top: -20px; left: -20px; right: -20px; bottom: -20px;
     z-index: -1;
-    background-image: url('https://images.pexels.com/photos/1697833/pexels-photo-1697833.jpeg');
+    /* THIS IS THE ONLY LINE THAT CHANGED */
+    background-image: url('/images/background.jpg');
     background-size: cover;
     background-position: center center;
     filter: blur(8px);
@@ -31,28 +32,26 @@ body::before {
 /* Lobby Styles */
 #lobby { text-align: center; background-color: rgba(34, 34, 34, 0.85); backdrop-filter: blur(5px); padding: 40px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 500px; }
 
-/* NEW: Rebranded Title Styles */
+/* Rebranded Title Styles */
 #game-title {
     font-family: 'Oswald', sans-serif;
     font-size: 4.5em;
     font-weight: 700;
     text-transform: uppercase;
-    /* Create a red-to-gold gradient for the text fill */
     background: linear-gradient(45deg, #ffd700, #e50914, #ffd700);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-fill-color: transparent;
-    /* A sharp, dark drop-shadow for depth */
     text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
     margin-bottom: 30px;
 }
 #game-title .subtitle {
     display: block;
     font-size: 0.35em;
-    letter-spacing: 2px; /* Give the subtitle some space */
-    color: #f0f0f0; /* Reset color so it's not a gradient */
-    -webkit-text-fill-color: #f0f0f0; /* Important for webkit browsers */
+    letter-spacing: 2px;
+    color: #f0f0f0;
+    -webkit-text-fill-color: #f0f0f0;
     text-shadow: 1px 1px 3px #000;
     margin-top: 5px;
 }
@@ -68,8 +67,8 @@ body::before {
 #ready-button.ready { background-color: #2ecc71; border: 2px solid #fff; }
 #lobby-players { list-style: none; padding: 0; margin-bottom: 20px; }
 .lobby-player-item { display: flex; justify-content: space-between; align-items: center; background-color: #333; padding: 10px; border-radius: 5px; margin-bottom: 5px; font-size: 1.2em; }
-.status-indicator { width: 20px; height: 20px; border-radius: 50%; background-color: #e74c3c; /* Red for not ready */ }
-.status-indicator.ready { background-color: #2ecc71; /* Green for ready */ }
+.status-indicator { width: 20px; height: 20px; border-radius: 50%; background-color: #e74c3c; }
+.status-indicator.ready { background-color: #2ecc71; }
 #game-container { width: 100%; }
 #game-board { width: 90%; max-width: 1200px; margin: 0 auto; background-color: rgba(26, 26, 26, 0.8); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; }
 #player-area { background-color: #222; border: 2px solid #555; border-radius: 10px; padding: 20px; text-align: center; min-height: 180px; position: relative; }
