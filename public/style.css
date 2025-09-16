@@ -1,47 +1,9 @@
-/* A CSS reset */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
-/* General Body styles */
-body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    background-color: #1a1a1a; 
-    color: #f0f0f0; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    min-height: 100vh; 
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Blurred Background Image */
-body::before {
-    content: '';
-    position: absolute;
-    top: -20px; left: -20px; right: -20px; bottom: -20px;
-    z-index: -1;
-    background-image: url('/images/background.jpg');
-    background-size: cover;
-    background-position: center center;
-    filter: blur(8px);
-    transform: scale(1.1);
-}
-
-/* Lobby Styles */
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a1a; color: #f0f0f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; position: relative; overflow: hidden; }
+body::before { content: ''; position: absolute; top: -20px; left: -20px; right: -20px; bottom: -20px; z-index: -1; background-image: url('/images/background.jpg'); background-size: cover; background-position: center center; filter: blur(8px); transform: scale(1.1); }
 #lobby { text-align: center; background-color: rgba(34, 34, 34, 0.85); backdrop-filter: blur(5px); padding: 40px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 500px; }
-
-/* NEW: Styles for the Logo Image */
-#game-logo {
-    max-width: 400px; /* Control the maximum width of the logo */
-    width: 100%;      /* Make it responsive within its container */
-    height: auto;     /* Maintain the aspect ratio */
-    margin-bottom: 30px; /* Space below the logo */
-}
-
+#game-logo { max-width: 400px; width: 100%; height: auto; margin-bottom: 30px; }
 #lobby h2 { margin-bottom: 15px; }
-
-/* ... (The rest of the CSS file is identical to the last version) ... */
 #player-name-input { width: 100%; padding: 10px; font-size: 1.1em; margin-bottom: 10px; border-radius: 5px; border: 1px solid #555; background-color: #333; color: #fff; }
 #join-game-button, #ready-button { width: 100%; padding: 12px; font-size: 1.2em; font-weight: bold; color: #fff; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
 #join-game-button { background-color: #27ae60; }

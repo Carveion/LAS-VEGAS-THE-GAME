@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VEGAS NIGHTS</title>
-    <!-- We can remove the Oswald font link now as we are not using it for the title -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="lobby">
-        <!-- REPLACED: The old h1 title -->
-        <!-- WITH: The new img tag for the logo -->
         <img src="/images/logo.png" alt="Vegas Nights Logo" id="game-logo">
-        
         <div id="join-form">
             <input type="text" id="player-name-input" placeholder="Enter your name" maxlength="12">
             <button id="join-game-button">Join Game</button>
@@ -23,9 +19,7 @@
             <button id="ready-button">Ready Up</button>
         </div>
     </div>
-
     <main id="game-container" style="display: none;">
-        <!-- The rest of the file is identical -->
         <div id="game-board">
             <div id="scoreboard"></div>
             <div id="casinos-container">

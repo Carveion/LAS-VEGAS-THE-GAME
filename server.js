@@ -1,5 +1,3 @@
-// server.js
-
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -15,10 +13,7 @@ const MAX_PLAYERS = 5;
 let lobby = { players: {} };
 let gameState = {};
 
-// --- LOBBY MANAGEMENT ---
-function getLobbyState() {
-    return Object.values(lobby.players);
-}
+function getLobbyState() { return Object.values(lobby.players); }
 
 function checkIfAllReady() {
     const players = Object.values(lobby.players);
@@ -27,7 +22,6 @@ function checkIfAllReady() {
     }
 }
 
-// --- GAME LOGIC (Functions) ---
 function startGame() {
     console.log(`Starting game with ${Object.keys(lobby.players).length} players!`);
     setupGameState(Object.keys(lobby.players));
@@ -37,21 +31,8 @@ function startGame() {
 }
 
 function setupGameState(playerIds) {
-    const playersFromLobby = playerIds.map((id, index) => ({
-        id: id,
-        name: lobby.players[id].name,
-        score: 0,
-        color: PLAYER_COLORS[index]
-    }));
-    gameState = {
-        players: playersFromLobby,
-        roundNumber: 0,
-        isGameOver: false,
-        roundOver: false,
-        casinos: [],
-        currentRoll: [],
-        currentPlayerIndex: 0,
-    };
+    const playersFromLobby = playerIds.map((id, index) => ({ id, name: lobby.players[id].name, score: 0, color: PLAYER_COLORS[index] }));
+    gameState = { players: playersFromLobby, roundNumber: 0, isGameOver: false, roundOver: false, casinos: [], currentRoll: [], currentPlayerIndex: 0, };
 }
 
 function startNewRound() {
@@ -70,8 +51,7 @@ function dealMoney() {
     gameState.casinos.forEach(casino => {
         while (casino.money.reduce((sum, val) => sum + val, 0) < 50000) {
             if (moneyDeck.length === 0) break;
-            const randomIndex = Math.floor(Math.random() * moneyDeck.length);
-            const card = moneyDeck.splice(randomIndex, 1)[0];
+            const card = moneyDeck.splice(Math.floor(Math.random() * moneyDeck.length), 1)[0];
             casino.money.push(card);
         }
         casino.money.sort((a, b) => b - a);
@@ -119,9 +99,7 @@ function calculateRoundWinners() {
                 const winner = contenders.shift();
                 const prize = casino.money.shift();
                 const winningPlayer = gameState.players.find(p => p.id === winner.playerId);
-                if (winningPlayer) {
-                    winningPlayer.score += prize;
-                }
+                if (winningPlayer) winningPlayer.score += prize;
             }
         }
     });
@@ -134,8 +112,7 @@ function endRound() {
     setTimeout(() => {
         if (gameState.roundNumber >= 4) {
             gameState.isGameOver = true;
-            const finalScores = gameState.players.slice().sort((a, b) => b.score - a.score);
-            const winner = finalScores[0];
+            const winner = gameState.players.slice().sort((a, b) => b.score - a.score)[0];
             io.emit('gameOver', winner);
         } else {
             io.emit('roundOver', gameState.roundNumber);
@@ -147,10 +124,8 @@ function endRound() {
     }, 4000);
 }
 
-// --- SOCKET.IO LISTENERS ---
 io.on('connection', (socket) => {
     console.log('Player connected:', socket.id);
-
     socket.on('joinLobby', (playerName) => {
         if (Object.keys(lobby.players).length < MAX_PLAYERS) {
             lobby.players[socket.id] = { id: socket.id, name: playerName, isReady: false };
@@ -166,7 +141,6 @@ io.on('connection', (socket) => {
         }
     });
 
-    // ** THIS IS THE FIXED CODE **
     socket.on('rollDice', () => {
         if (!gameState.players) return;
         const currentPlayer = gameState.players[gameState.currentPlayerIndex];
@@ -188,7 +162,6 @@ io.on('connection', (socket) => {
 
     socket.on('playAgain', () => {
         if (gameState.isGameOver) {
-            // Un-ready all players and send everyone back to the lobby screen
             Object.values(lobby.players).forEach(p => p.isReady = false);
             gameState = {};
             io.emit('backToLobby');
@@ -200,14 +173,11 @@ io.on('connection', (socket) => {
         console.log('Player disconnected:', socket.id);
         const playerWasInGame = gameState.players && gameState.players.find(p => p.id === socket.id);
         delete lobby.players[socket.id];
-
         if (playerWasInGame) {
-            // If a player leaves mid-game, reset everything
             lobby = { players: {} };
             gameState = {};
-            io.emit('gameReset'); // Tell clients to go back to the very start
+            io.emit('gameReset');
         } else {
-            // If they were just in the lobby, just update the lobby
             io.emit('lobbyUpdate', getLobbyState());
         }
     });
