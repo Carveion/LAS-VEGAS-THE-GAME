@@ -15,7 +15,7 @@ body {
     overflow: hidden;
 }
 
-/* NEW: Blurred Background Image using a pseudo-element */
+/* Blurred Background Image */
 body::before {
     content: '';
     position: absolute;
@@ -31,28 +31,34 @@ body::before {
 /* Lobby Styles */
 #lobby { text-align: center; background-color: rgba(34, 34, 34, 0.85); backdrop-filter: blur(5px); padding: 40px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 500px; }
 
-/* NEW: Title Styles */
+/* NEW: Rebranded Title Styles */
 #game-title {
-    font-family: 'Great Vibes', cursive;
-    font-size: 5em;
-    font-weight: normal;
-    color: #e50914; /* Elegant deep red */
-    text-shadow: 
-        0 0 5px #ffd700,  /* Inner gold glow */
-        0 0 10px #ffd700, /* Middle gold glow */
-        0 0 20px #ff8c00, /* Outer orange-gold glow */
-        0 0 35px #e50914; /* Red aura */
+    font-family: 'Oswald', sans-serif;
+    font-size: 4.5em;
+    font-weight: 700;
+    text-transform: uppercase;
+    /* Create a red-to-gold gradient for the text fill */
+    background: linear-gradient(45deg, #ffd700, #e50914, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    /* A sharp, dark drop-shadow for depth */
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
     margin-bottom: 30px;
 }
 #game-title .subtitle {
     display: block;
-    font-size: 0.3em;
-    color: #f0f0f0;
-    text-shadow: 0 0 5px #000;
-    margin-top: -15px;
+    font-size: 0.35em;
+    letter-spacing: 2px; /* Give the subtitle some space */
+    color: #f0f0f0; /* Reset color so it's not a gradient */
+    -webkit-text-fill-color: #f0f0f0; /* Important for webkit browsers */
+    text-shadow: 1px 1px 3px #000;
+    margin-top: 5px;
 }
 #lobby h2 { margin-bottom: 15px; }
-/* ... (Rest of lobby styles are the same) ... */
+
+/* ... (The rest of the CSS file is identical to the last version) ... */
 #player-name-input { width: 100%; padding: 10px; font-size: 1.1em; margin-bottom: 10px; border-radius: 5px; border: 1px solid #555; background-color: #333; color: #fff; }
 #join-game-button, #ready-button { width: 100%; padding: 12px; font-size: 1.2em; font-weight: bold; color: #fff; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; }
 #join-game-button { background-color: #27ae60; }
@@ -64,29 +70,12 @@ body::before {
 .lobby-player-item { display: flex; justify-content: space-between; align-items: center; background-color: #333; padding: 10px; border-radius: 5px; margin-bottom: 5px; font-size: 1.2em; }
 .status-indicator { width: 20px; height: 20px; border-radius: 50%; background-color: #e74c3c; /* Red for not ready */ }
 .status-indicator.ready { background-color: #2ecc71; /* Green for ready */ }
-
-/* Game Container Styles */
 #game-container { width: 100%; }
 #game-board { width: 90%; max-width: 1200px; margin: 0 auto; background-color: rgba(26, 26, 26, 0.8); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; }
 #player-area { background-color: #222; border: 2px solid #555; border-radius: 10px; padding: 20px; text-align: center; min-height: 180px; position: relative; }
 #dice-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; min-height: 80px; }
-
-/* NEW: Turn Prompt Styles */
-#turn-prompt {
-    font-size: 1.8em;
-    font-weight: bold;
-    color: #f1c40f;
-    margin-bottom: 15px;
-    height: 30px; /* Reserve space to prevent layout shift */
-    animation: pulse 2s infinite;
-}
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.05); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* ... (The rest of the CSS is identical and can be copied from the last version) ... */
+#turn-prompt { font-size: 1.8em; font-weight: bold; color: #f1c40f; margin-bottom: 15px; height: 30px; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
 #scoreboard { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; padding: 10px; background-color: #222; border-radius: 8px; flex-wrap: wrap; min-height: 80px; align-items: center; }
 .player-score { text-align: center; padding: 5px 15px; border-radius: 5px; border: 3px solid transparent; transition: border-color 0.3s; color: #fff; }
 .player-score .name { font-weight: bold; font-size: 1.1em; }

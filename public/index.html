@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VEGAS NIGHTS</title>
-    <!-- NEW: Adding the Google Font for our title -->
+    <!-- NEW: Swapped 'Great Vibes' for the 'Oswald' font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="lobby">
-        <!-- NEW: Updated Game Title -->
+        <!-- The title's HTML structure is the same, but it will look different due to CSS -->
         <h1 id="game-title">VEGAS NIGHTS <span class="subtitle">by CARVEION INC.</span></h1>
         
         <div id="join-form">
@@ -40,9 +40,7 @@
                 <div class="casino" id="casino-6"><div class="casino-title"><span>Wynn</span><div class="die-visual face-6"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="money-cards"></div><div class="placed-dice"></div></div>
             </div>
             <div id="player-area">
-                <!-- NEW: Prompt for the player's turn -->
                 <div id="turn-prompt"></div>
-                
                 <div id="dice-container"></div>
                 <button id="roll-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24" fill="currentColor"><path d="M32,32H480a32,32,0,0,1,32,32V480a32,32,0,0,1-32,32H32a32,32,0,0,1-32-32V64A32,32,0,0,1,32,32ZM160,128a32,32,0,1,0,32,32A32,32,0,0,0,160,128Zm192,0a32,32,0,1,0,32,32A32,32,0,0,0,352,128ZM160,256a32,32,0,1,0,32,32A32,32,0,0,0,160,256Zm96,0a32,32,0,1,0,32,32A32,32,0,0,0,256,256Zm96,0a32,32,0,1,0,32,32A32,32,0,0,0,352,256ZM160,384a32,32,0,1,0,32,32A32,32,0,0,0,160,384Zm192,0a32,32,0,1,0,32,32A32,32,0,0,0,352,384Z"/></svg><span id="roll-button-text">Roll Dice</span></button>
                 <button id="play-again-button" style="display: none;">Play Again</button>
