@@ -3,21 +3,25 @@
 document.addEventListener('DOMContentLoaded', () => {
     const socket = io();
 
-    // Elements
+    // --- Global Elements ---
     const lobbyContainer = document.getElementById('lobby');
     const gameContainer = document.getElementById('game-container');
+
+    // --- Lobby Elements ---
     const joinForm = document.getElementById('join-form');
     const lobbyInfo = document.getElementById('lobby-info');
     const playerNameInput = document.getElementById('player-name-input');
     const joinGameButton = document.getElementById('join-game-button');
     const lobbyPlayersList = document.getElementById('lobby-players');
     const readyButton = document.getElementById('ready-button');
+
+    // --- Game Elements ---
     const rollButton = document.getElementById('roll-button');
     const rollButtonText = document.getElementById('roll-button-text');
     const playAgainButton = document.getElementById('play-again-button');
     const playerDiceContainer = document.getElementById('dice-container');
     const scoreboardContainer = document.getElementById('scoreboard');
-    const turnPrompt = document.getElementById('turn-prompt'); // NEW
+    const turnPrompt = document.getElementById('turn-prompt');
     
     let myPlayerId = null;
 
@@ -35,8 +39,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     readyButton.addEventListener('click', () => { socket.emit('playerReady'); });
 
-    socket.on('lobbyUpdate', (players) => { /* ... same as before ... */ });
-    socket.on('gameStarted', () => { lobbyContainer.style.display = 'none'; gameContainer.style.display = 'block'; });
+    socket.on('lobbyUpdate', (players) => {
+        lobbyPlayersList.innerHTML = '';
+        let me = null;
+        players.forEach(player => {
+            if (player.id === myPlayerId) me = player;
+            const playerItem = document.createElement('div');
+            playerItem.className = 'lobby-player-item';
+            playerItem.innerHTML = `<span>${player.name} ${player.id === myPlayerId ? '(You)' : ''}</span><div class="status-indicator ${player.isReady ? 'ready' : ''}"></div>`;
+            lobbyPlayersList.appendChild(playerItem);
+        });
+        if (me) {
+            readyButton.textContent = me.isReady ? 'Unready' : 'Ready Up';
+            readyButton.classList.toggle('ready', me.isReady);
+        }
+    });
+    
+    socket.on('gameStarted', () => {
+        lobbyContainer.style.display = 'none';
+        gameContainer.style.display = 'block';
+    });
+
     socket.on('gameStateUpdate', (gameState) => {
         if (gameState && gameState.players && gameState.players.length > 0) {
             updateGameUI(gameState);
@@ -44,12 +67,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     rollButton.addEventListener('click', () => { socket.emit('rollDice'); });
-    playerDiceContainer.addEventListener('click', (event) => { /* ... same as before ... */ });
+    playerDiceContainer.addEventListener('click', (event) => {
+        const group = event.target.closest('.dice-group');
+        if (group && group.dataset.value) {
+            socket.emit('placeDice', parseInt(group.dataset.value));
+        }
+    });
     playAgainButton.addEventListener('click', () => { socket.emit('playAgain'); });
     socket.on('roundOver', (roundNumber) => { alert(`Round ${roundNumber} is over!`); });
     socket.on('gameOver', (winner) => { alert(`GAME OVER!\nWinner: ${winner.name} with $${winner.score.toLocaleString()}!`); });
-    socket.on('backToLobby', () => { gameContainer.style.display = 'none'; lobbyContainer.style.display = 'block'; });
-    socket.on('gameReset', () => { /* ... same as before ... */ });
+
+    socket.on('backToLobby', () => {
+        gameContainer.style.display = 'none';
+        lobbyContainer.style.display = 'block';
+    });
+
+    socket.on('gameReset', () => {
+        alert("A player disconnected. The game has been reset.");
+        window.location.reload(); // Simplest way to reset the client state
+    });
 
     // --- UI RENDERER ---
     function updateGameUI(gameState) {
@@ -62,14 +98,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentPlayer = gameState.players[gameState.currentPlayerIndex];
         const isMyTurn = me && currentPlayer && me.id === currentPlayer.id;
         
-        // NEW: Update Turn Prompt
         if (isMyTurn && !gameState.roundOver && !gameState.isGameOver) {
             turnPrompt.textContent = "It's Your Turn!";
         } else {
             turnPrompt.textContent = "";
         }
 
-        // ... (The rest of updateGameUI is identical to the last version)
         scoreboardContainer.innerHTML = '';
         gameState.players.forEach((player, index) => {
             const scoreDiv = document.createElement('div');
@@ -81,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             scoreDiv.style.backgroundColor = player.color;
             scoreboardContainer.appendChild(scoreDiv);
         });
+
         gameState.casinos.forEach(casino => {
             const casinoEl = document.getElementById(`casino-${casino.id}`);
             casinoEl.querySelector('.money-cards').innerHTML = casino.money.map(amount => `<div class="money-card">$${amount/1000}k</div>`).join('');
@@ -96,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+
         playerDiceContainer.innerHTML = '';
         if (isMyTurn && gameState.currentRoll.length > 0) {
             const groupedDice = gameState.currentRoll.reduce((acc, val) => ({ ...acc, [val]: (acc[val] || 0) + 1 }), {});
@@ -109,13 +145,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 playerDiceContainer.appendChild(groupContainer);
             }
         }
+        
         rollButton.disabled = !isMyTurn || gameState.currentRoll.length > 0 || gameState.roundOver;
         rollButtonText.textContent = gameState.currentRoll.length > 0 ? "Place Your Dice" : "Roll Dice";
     }
     
-    // ... (The rest of the file is identical)
-    socket.on('lobbyUpdate', (players) => { lobbyPlayersList.innerHTML = ''; let me = null; players.forEach(player => { if (player.id === myPlayerId) me = player; const playerItem = document.createElement('div'); playerItem.className = 'lobby-player-item'; playerItem.innerHTML = `<span>${player.name} ${player.id === myPlayerId ? '(You)' : ''}</span><div class="status-indicator ${player.isReady ? 'ready' : ''}"></div>`; lobbyPlayersList.appendChild(playerItem); }); if (me) { readyButton.textContent = me.isReady ? 'Unready' : 'Ready Up'; readyButton.classList.toggle('ready', me.isReady); } });
-    playerDiceContainer.addEventListener('click', (event) => { const group = event.target.closest('.dice-group'); if (group && group.dataset.value) { socket.emit('placeDice', parseInt(group.dataset.value)); } });
-    socket.on('gameReset', () => { alert("A player disconnected. The game has been reset."); gameContainer.style.display = 'none'; lobbyContainer.style.display = 'block'; joinForm.style.display = 'block'; lobbyInfo.style.display = 'none'; lobbyPlayersList.innerHTML = ''; });
-    function createDieVisual(value, color) { const die = document.createElement('div'); die.className = `die-visual face-${value}`; if(color) { die.style.backgroundColor = color; } for (let i = 0; i < value; i++) { die.innerHTML += '<div class="dot"></div>'; } return die; }
+    function createDieVisual(value, color) {
+        const die = document.createElement('div');
+        die.className = `die-visual face-${value}`;
+        if(color) { die.style.backgroundColor = color; }
+        for (let i = 0; i < value; i++) { die.innerHTML += '<div class="dot"></div>'; }
+        return die;
+    }
 });
