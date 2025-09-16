@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('gameReset', () => {
         alert("A player disconnected. The game has been reset.");
-        window.location.reload(); // Simplest way to reset the client state
+        window.location.reload();
     });
 
     // --- UI RENDERER ---
