@@ -21,7 +21,6 @@ body::before {
     position: absolute;
     top: -20px; left: -20px; right: -20px; bottom: -20px;
     z-index: -1;
-    /* THIS IS THE ONLY LINE THAT CHANGED */
     background-image: url('/images/background.jpg');
     background-size: cover;
     background-position: center center;
@@ -32,29 +31,14 @@ body::before {
 /* Lobby Styles */
 #lobby { text-align: center; background-color: rgba(34, 34, 34, 0.85); backdrop-filter: blur(5px); padding: 40px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 500px; }
 
-/* Rebranded Title Styles */
-#game-title {
-    font-family: 'Oswald', sans-serif;
-    font-size: 4.5em;
-    font-weight: 700;
-    text-transform: uppercase;
-    background: linear-gradient(45deg, #ffd700, #e50914, #ffd700);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-    margin-bottom: 30px;
+/* NEW: Styles for the Logo Image */
+#game-logo {
+    max-width: 400px; /* Control the maximum width of the logo */
+    width: 100%;      /* Make it responsive within its container */
+    height: auto;     /* Maintain the aspect ratio */
+    margin-bottom: 30px; /* Space below the logo */
 }
-#game-title .subtitle {
-    display: block;
-    font-size: 0.35em;
-    letter-spacing: 2px;
-    color: #f0f0f0;
-    -webkit-text-fill-color: #f0f0f0;
-    text-shadow: 1px 1px 3px #000;
-    margin-top: 5px;
-}
+
 #lobby h2 { margin-bottom: 15px; }
 
 /* ... (The rest of the CSS file is identical to the last version) ... */

@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VEGAS NIGHTS</title>
-    <!-- NEW: Swapped 'Great Vibes' for the 'Oswald' font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
-    
+    <!-- We can remove the Oswald font link now as we are not using it for the title -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="lobby">
-        <!-- The title's HTML structure is the same, but it will look different due to CSS -->
-        <h1 id="game-title">VEGAS NIGHTS <span class="subtitle">by CARVEION INC.</span></h1>
+        <!-- REPLACED: The old h1 title -->
+        <!-- WITH: The new img tag for the logo -->
+        <img src="/images/logo.png" alt="Vegas Nights Logo" id="game-logo">
         
         <div id="join-form">
             <input type="text" id="player-name-input" placeholder="Enter your name" maxlength="12">
@@ -28,10 +25,10 @@
     </div>
 
     <main id="game-container" style="display: none;">
+        <!-- The rest of the file is identical -->
         <div id="game-board">
             <div id="scoreboard"></div>
             <div id="casinos-container">
-                <!-- All 6 casino divs are still in here, unchanged -->
                 <div class="casino" id="casino-1"><div class="casino-title"><span>Bellagio</span><div class="die-visual face-1"><div class="dot"></div></div></div><div class="money-cards"></div><div class="placed-dice"></div></div>
                 <div class="casino" id="casino-2"><div class="casino-title"><span>Caesars Palace</span><div class="die-visual face-2"><div class="dot"></div><div class="dot"></div></div></div><div class="money-cards"></div><div class="placed-dice"></div></div>
                 <div class="casino" id="casino-3"><div class="casino-title"><span>MGM Grand</span><div class="die-visual face-3"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div><div class="money-cards"></div><div class="placed-dice"></div></div>
