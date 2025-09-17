@@ -19,7 +19,45 @@
             <button id="ready-button">Ready Up</button>
         </div>
     </div>
+
+    <div id="mode-selection" style="display: none;">
+        <h2>Choose Your Game Mode</h2>
+        <div class="mode-buttons">
+            <button class="mode-button" data-mode="classic">
+                <h3>Classic</h3>
+                <p>The original Las Vegas dice game experience.</p>
+            </button>
+            <button class="mode-button" data-mode="highStakes">
+                <h3>High Stakes</h3>
+                <p>Add chaos with Event Cards and powerful new abilities.</p>
+            </button>
+        </div>
+    </div>
+
     <main id="game-container" style="display: none;">
+        <div id="high-stakes-ui" style="display: none;">
+            <div id="event-card-display" class="card">
+                <h3 id="event-card-title">Event</h3>
+                <p id="event-card-text">Waiting for the first turn...</p>
+            </div>
+            <div id="power-shop" class="card">
+                <h3>Available Powers</h3>
+                <p>Activate after rolling by meeting the conditions.</p>
+                <div class="power-buttons">
+                    <button class="power-button" data-power="buyCasino"><strong>Buy Casino</strong><span>Roll a total of 30+.</span></button>
+                    <button class="power-button" data-power="diceHeist"><strong>Dice Heist</strong><span>Roll four 5s.</span></button>
+                    <button class="power-button" data-power="director"><strong>Director</strong><span>Roll three 5s to gain Immunity.</span></button>
+                    <button class="power-button" data-power="shiftBet"><strong>Shift Bet</strong><span>Roll four 1s to unlock.</span></button>
+                </div>
+            </div>
+            <div id="active-powers-display" class="card">
+                <h3>Active Powers</h3>
+                <div id="active-powers-list">
+                    <!-- Active powers will be shown here -->
+                </div>
+            </div>
+        </div>
+
         <div id="game-board">
             <div id="scoreboard"></div>
             <div id="casinos-container">
@@ -33,11 +71,37 @@
             <div id="player-area">
                 <div id="turn-prompt"></div>
                 <div id="dice-container"></div>
-                <button id="roll-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24" fill="currentColor"><path d="M32,32H480a32,32,0,0,1,32,32V480a32,32,0,0,1-32,32H32a32,32,0,0,1-32-32V64A32,32,0,0,1,32,32ZM160,128a32,32,0,1,0,32,32A32,32,0,0,0,160,128Zm192,0a32,32,0,1,0,32,32A32,32,0,0,0,352,128ZM160,256a32,32,0,1,0,32,32A32,32,0,0,0,160,256Zm96,0a32,32,0,1,0,32,32A32,32,0,0,0,256,256Zm96,0a32,32,0,1,0,32,32A32,32,0,0,0,352,256ZM160,384a32,32,0,1,0,32,32A32,32,0,0,0,160,384Zm192,0a32,32,0,1,0,32,32A32,32,0,0,0,352,384Z"/></svg><span id="roll-button-text">Roll Dice</span></button>
+                <button id="roll-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="24" height="24" fill="currentColor"><path d="M32,32...Z"/></svg><span id="roll-button-text">Roll Dice</span></button>
                 <button id="play-again-button" style="display: none;">Play Again</button>
             </div>
         </div>
     </main>
+    
+    <div id="golden-die-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Choose Your Golden Die</h2>
+            <p>Select the face value for your wild die.</p>
+            <div class="dice-chooser">
+                <button data-value="1"><div class="die-visual face-1"><div class="dot"></div></div></button>
+                <button data-value="2"><div class="die-visual face-2"><div class="dot"></div><div class="dot"></div></div></button>
+                <button data-value="3"><div class="die-visual face-3"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></button>
+                <button data-value="4"><div class="die-visual face-4"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></button>
+                <button data-value="5"><div class="die-visual face-5"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></button>
+                <button data-value="6"><div class="die-visual face-6"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="buy-casino-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Buy a Casino!</h2>
+            <p>Your roll was high enough! Choose a casino to claim its highest prize.</p>
+            <div id="casino-chooser" class="casino-chooser">
+                <!-- Casino buttons will be added by JS -->
+            </div>
+        </div>
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="game.js"></script>
 </body>
