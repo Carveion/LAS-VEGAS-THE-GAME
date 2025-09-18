@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let canActivate = false;
             if (isMyTurn && gameState.currentRoll.length > 0 && !gameState.currentRoll.includes('G')) {
                 if (power === 'buyCasino' && rollSum >= 30) canActivate = true;
-                if (power === 'diceHeist' && counts[5] >= 4 && gameState.turnNumber > gameState.players.length) canActivate = true;
+                if (power === 'diceHeist' && counts[5] >= 4) canActivate = true;
                 if (power === 'director' && counts[5] >= 3) canActivate = true;
                 if (power === 'shiftBet' && counts[1] >= 4) canActivate = true;
             }

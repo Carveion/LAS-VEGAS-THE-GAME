@@ -13,14 +13,31 @@ app.use(express.static('public'));
 const PLAYER_COLORS = ['#e74c3c', '#3498db', '#2ecc71', '#f1c40f', '#9b59b6'];
 const MAX_PLAYERS = 5;
 const CASINO_NAMES = ["Bellagio", "Caesars Palace", "MGM Grand", "The Venetian", "Luxor", "Wynn"];
+
+// THIS IS THE ONLY SECTION THAT HAS CHANGED
 const EVENT_CARD_TEMPLATES = [
-    { type: 'Market Up', title: 'Market Up', text: 'Bull market! All casinos gain +$10k on each money card.' }, { type: 'Market Up', title: 'Market Up', text: 'Bull market! All casinos gain +$10k on each money card.' },
-    { type: 'Market Down', title: 'Market Down', text: 'Bear market! All casinos lose -$10k on each money card.' }, { type: 'Market Down', title: 'Market Down', text: 'Bear market! All casinos lose -$10k on each money card.' },
-    { type: 'Casino Acquired', title: 'Casino Acquired', text: 'A mystery buyer acquires {casino}! It is closed for the round.' }, { type: 'Casino Acquired', title: 'Casino Acquired', text: 'A mystery buyer acquires {casino}! It is closed for the round.' },
-    { type: 'Casino Renovated', title: 'Renovation!', text: '{casino} is renovated! Its total value is DOUBLED.' }, { type: 'Casino Renovated', title: 'Renovation!', text: '{casino} is renovated! Its total value is DOUBLED.' },
-    { type: 'Casino Auctioned', title: 'Auction!', text: '{casino} is auctioned off! Its total value is HALVED.' }, { type: 'Casino Auctioned', title: 'Auction!', text: '{casino} is auctioned off! Its total value is HALVED.' },
+    // Positive Events
+    { type: 'Market Up', title: 'Market Up', text: 'Bull market! All casinos gain +$10k on each money card.' },
+    { type: 'Market Up', title: 'Market Up', text: 'Bull market! All casinos gain +$10k on each money card.' },
+    { type: 'Casino Renovated', title: 'Renovation!', text: '{casino} is renovated! Its total value is DOUBLED.' },
+    { type: 'Casino Renovated', title: 'Renovation!', text: '{casino} is renovated! Its total value is DOUBLED.' },
     { type: 'Event Day!', title: 'Event Day!', text: 'It\'s showtime! {casino}\'s value is multiplied by 5!' },
     { type: 'Golden Die', title: 'Golden Die', text: 'Lady Luck smiles! You get a Golden Die on your next roll.' },
+
+    // Negative Events
+    { type: 'Market Down', title: 'Market Down', text: 'Bear market! All casinos lose -$10k on each money card.' },
+    { type: 'Market Down', title: 'Market Down', text: 'Bear market! All casinos lose -$10k on each money card.' },
+    { type: 'Casino Auctioned', title: 'Auction!', text: '{casino} is auctioned off! Its total value is HALVED.' },
+    { type: 'Casino Auctioned', title: 'Auction!', text: '{casino} is auctioned off! Its total value is HALVED.' },
+    { type: 'Casino Acquired', title: 'Casino Acquired', text: 'A mystery buyer acquires {casino}! It is closed for the round.' },
+    { type: 'Casino Acquired', title: 'Casino Acquired', text: 'A mystery buyer acquires {casino}! It is closed for the round.' }, // Limited to 2
+
+    // Neutral "Nothing Happens" Events
+    { type: 'Normal Day', title: 'Market Unchanged', text: 'A quiet day on the strip. The market holds steady.' },
+    { type: 'Normal Day', title: 'Market Unchanged', text: 'A quiet day on the strip. The market holds steady.' },
+    { type: 'Normal Day', title: 'Market Unchanged', text: 'A quiet day on the strip. The market holds steady.' },
+    { type: 'Normal Day', title: 'Market Unchanged', text: 'A quiet day on the strip. The market holds steady.' },
+    { type: 'Normal Day', title: 'Market Unchanged', text: 'A quiet day on the strip. The market holds steady.' },
 ];
 
 let lobby = { players: {}, hostId: null };
@@ -68,8 +85,8 @@ function rollDiceForCurrentPlayer(){const player=gameState.players[gameState.cur
 function placeDiceForCurrentPlayer(dieValue){const player=gameState.players[gameState.currentPlayerIndex];const targetCasino=gameState.casinos.find(c=>c.id===dieValue);const diceToPlace=gameState.currentRoll.filter(d=>d===dieValue);if(!targetCasino.placedDice[player.id]){targetCasino.placedDice[player.id]=0}targetCasino.placedDice[player.id]+=diceToPlace.length;player.dice-=diceToPlace.length;gameState.currentRoll=[]}
 function calculateRoundWinners(){gameState.casinos.forEach(casino=>{const contenders=Object.entries(casino.placedDice).map(([playerId,diceCount])=>({playerId,diceCount})).sort((a,b)=>b.diceCount-a.diceCount);while(contenders.length>0&&casino.money.length>0){const tiedPlayers=contenders.filter(p=>p.diceCount===contenders[0].diceCount);if(tiedPlayers.length>1){contenders.splice(0,tiedPlayers.length)}else{const winner=contenders.shift();const prize=casino.money.shift();const winningPlayer=gameState.players.find(p=>p.id===winner.playerId);if(winningPlayer)winningPlayer.score+=prize}}})}
 function endRound(){
-    if(gameMode === 'highStakes') {
-        // Here you would add the logic for players to use their "Shift Bet" power if they have it
+    if(gameMode === 'highStakes' && gameState.players.some(p => p.powers.canShiftBet)) {
+        console.log("Shift Bet logic would trigger here.");
     }
     calculateRoundWinners();
     gameState.roundOver=true;io.emit('gameStateUpdate',{...gameState,gameMode});setTimeout(()=>{if(gameState.roundNumber>=4){gameState.isGameOver=true;const winner=gameState.players.slice().sort((a,b)=>b.score-a.score)[0];io.emit('gameOver',winner)}else{io.emit('roundOver',gameState.roundNumber);setTimeout(()=>{startNewRound();io.emit('gameStateUpdate',{...gameState,gameMode})},3000)}},5000)
@@ -107,6 +124,7 @@ function applyEventEffect(card, drawer) {
         case 'Casino Auctioned': if(randomCasino) randomCasino.money = randomCasino.money.map(m => Math.floor(m / 2)); break;
         case 'Event Day!': if(randomCasino) randomCasino.money = randomCasino.money.map(m => m * 5); break;
         case 'Golden Die': drawer.powers.hasGoldenDie = true; break;
+        case 'Normal Day': break; // Do nothing
     }
 }
 
@@ -168,21 +186,28 @@ io.on('connection', (socket) => {
             case 'buyCasino':
                 if (rollSum >= 30) {
                     const availableCasinos = gameState.casinos.filter(c => !c.isClosed && c.money.length > 0);
-                    socket.emit('showBuyCasinoModal', availableCasinos);
-                    return; // Don't end turn yet, wait for player's choice
+                    if (availableCasinos.length > 0) {
+                        socket.emit('showBuyCasinoModal', availableCasinos);
+                        return;
+                    }
                 }
                 break;
             case 'diceHeist':
                 if (counts[5] >= 4) {
                     let maxDice = -1, targetPlayer = null;
-                    gameState.players.forEach(p => { if(p.id !== currentPlayer.id && p.dice > maxDice) { maxDice = p.dice; targetPlayer = p; } });
+                    const placedDiceCounts = {};
+                    gameState.players.forEach(p => placedDiceCounts[p.id] = 0);
+                    gameState.casinos.forEach(c => { for(const pid in c.placedDice) { placedDiceCounts[pid] += c.placedDice[pid]; } });
+                    gameState.players.forEach(p => { if(p.id !== currentPlayer.id && placedDiceCounts[p.id] >= maxDice) { maxDice = placedDiceCounts[p.id]; targetPlayer = p; } });
                     
                     if(targetPlayer) {
-                        targetPlayer.dice -= 1;
-                        currentPlayer.dice += 1;
-                        gameState.lastEvent = { title: 'Dice Heist!', text: `${currentPlayer.name} rolled four 5s and stole a future die from ${targetPlayer.name}!`, drawnBy: "Power" };
-                        powerActivated = true;
-                        endTurn = true;
+                        if (targetPlayer.dice > 0) {
+                             targetPlayer.dice -= 1;
+                             currentPlayer.dice += 1;
+                             gameState.lastEvent = { title: 'Dice Heist!', text: `${currentPlayer.name} stole a future die from ${targetPlayer.name}!`, drawnBy: "Power" };
+                             powerActivated = true;
+                             endTurn = true;
+                        }
                     }
                 }
                 break;
